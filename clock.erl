@@ -5,7 +5,7 @@ start(Time,Fun)->
     register(clock,spawn(fun()->
 				 tick(Time,Fun) end)).
 stop()->
-    clock ! stop
+    clock ! stop.
 
 tick(Time,Fun)->
     receive
