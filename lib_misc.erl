@@ -1,5 +1,5 @@
 -module(lib_misc).
--export([sum/1,sum/2,for/3,qsort/1,pythag/1,perms/1]) .
+-export([sum/1,sum/2,for/3,qsort/1,pythag/1,perms/1,on_exit/2]) .
 
 sum(L)-> sum(L,0) .
 sum([],N) -> N;
@@ -31,3 +31,13 @@ perms([])->
 perms(L) ->
     [[H|T]||H<-L,
 	    T<-perms(L--[H])].
+
+on_exit(Pid,Fun)->
+    spawn(fun()->
+		  process_flag(trap_exit,true),
+		  link(Pid),
+		  receive
+		      {'EXIT',Pid,Why}->
+			  Fun(Why)
+		  end
+	  end).
