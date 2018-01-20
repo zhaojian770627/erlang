@@ -16,6 +16,6 @@ rpc(Pid,M,F,A)->
 loop()->
     receive
 	{rpc,Pid,M,F,A}->
-	    Pid!{self(),(abc)},
+	    Pid!{self(),(apply(M,F,A))},
 	    loop()
     end.
