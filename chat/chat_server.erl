@@ -1,3 +1,9 @@
+%% 服务器端mm 在启动服务时创建
+%% 见start_port_instance这个函数会在start_port_serer中
+%% 作为Fun传入，当accept一个新链接时（见start_accept）会
+%% 新创建一个进程，在start_child中会调用Fun(即start_port_instance)
+%% 这个进程就是MM
+
 -module(chat_server).
 -import(lib_chan_mm,[send/2,controller/2]).
 -import(lists,[delete/2,foreach/2,map/2,member/2,reverse/2]).
@@ -10,7 +16,7 @@ start()->
 
 start_server()->
     register(chat_server,
-	     spawn(fun->
+	     spawn(fun()->
 			  process_flag(trap_exit,true),
 			  Val=(catch server_loop([])),
 			  io:format("Server terminated with:~p~n",[Val])
@@ -42,7 +48,7 @@ server_loop(L)->
 lookup(G,[{G,Pid}|_])->
     {ok,Pid};
 lookup(G,[_|T]) ->
-    loopup(G,T);
+    lookup(G,T);
 lookup(_,[]) ->
     error.
 
