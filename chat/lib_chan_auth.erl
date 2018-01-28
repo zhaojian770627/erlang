@@ -14,10 +14,10 @@ make_challenge() ->
     random_string(25).
 
 make_response(Challenge, Secret) ->
-    lib_md5:string(Challenge ++ Secret).
+    erlang:md5(Challenge ++ Secret).
 
 is_response_correct(Challenge, Response, Secret) ->
-    case lib_md5:string(Challenge ++ Secret) of
+    case erlang:md5(Challenge ++ Secret) of
 	Response -> true;
 	_        -> false
     end.
