@@ -5,10 +5,10 @@
 -export([start/2]).
 
 start(C,Nick)->
-    process_flag(trag_exit,true),
+    process_flag(trap_exit,true),
     controller(C,self()),
     send(C,ack),
-    self()!{C,{relay,Nick,"I'm starting the group"}},
+    self()!{chan,C,{relay,Nick,"I'm starting the group"}},
     group_controller([{C,Nick}]).
 
 delete(Pid,[{Pid,Nick}|T],L)->
